@@ -1,3 +1,5 @@
+const { load } = require('../lib/loaders/file')
+
 /* eslint-env mocha */
 describe('json-schema-deref-sync', function () {
   var expect = require('chai').expect
@@ -7,6 +9,8 @@ describe('json-schema-deref-sync', function () {
   var async = require('async')
   var fileLoader = require('../lib/loaders/file')
   var customLoaders = require('./custom-loaders')
+
+  var loaders = { file: fileLoader }
 
   var tempFolder = '/var/tmp/json-deref-schema-tests/'
   before(function (done) {
@@ -50,7 +54,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/basicfileref')
       var expected = require('./schemas/basic')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -59,7 +63,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/basicfileref')
       var expected = require('./schemas/basic')
       const baseFolder = path.resolve(__dirname, './schemas')
-      var schema = deref(input, { baseFolder })
+      var schema = deref(input, { baseFolder, loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -68,7 +72,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/basicfileref')
       var expected = require('./schemas/basic')
 
-      var schema = deref(input, { baseFolder: path.join(__dirname, 'schemas') })
+      var schema = deref(input, { baseFolder: path.join(__dirname, 'schemas'), loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -77,7 +81,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/localandfilerefs')
       var expected = require('./schemas/localrefs.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -86,7 +90,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/filerefs')
       var expected = require('./schemas/basic.json') // same expected output
 
-      var schema = deref(input)
+      var schema = deref(input, { loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -95,7 +99,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/filerefswithhash')
       var expected = require('./schemas/basic.json') // same expected output
 
-      var schema = deref(input)
+      var schema = deref(input, { loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -145,7 +149,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/webrefswithhash')
       var expected = require('./schemas/webrefswithhash.expected.json') // same expected output
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -154,7 +158,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/webrefswithpointer')
       var expected = require('./schemas/webrefswithpointer.expected.json')
 
-      var schema = deref(input)
+      var schema = deref(input, { loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -163,7 +167,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/filerefswithpointer')
       var expected = require('./schemas/filerefswithpointer.expected.json') // same expected output
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -172,7 +176,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/api.props.json')
       var expected = require('./schemas/api.props.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -181,7 +185,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/api.linksref.json')
       var expected = require('./schemas/api.linksref.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -199,7 +203,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/arrayfileref.json')
       var expected = require('./schemas/arrayfileref.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -208,7 +212,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/apideeplink.json')
       var expected = require('./schemas/apideeplink.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -217,7 +221,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/apinestedrefs.json')
       var expected = require('./schemas/apinestedrefs.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -227,7 +231,8 @@ describe('json-schema-deref-sync', function () {
       var expected = require('./schemas/customtype.expected.json')
 
       var options = {
-        baseFolder: './test/schemas'
+        baseFolder: './test/schemas',
+        loaders: loaders
       }
 
       var schema = deref(input, options)
@@ -240,7 +245,8 @@ describe('json-schema-deref-sync', function () {
       var expected = require('./schemas/customunknown.expected.json')
 
       var options = {
-        baseFolder: './test/schemas'
+        baseFolder: './test/schemas',
+        loaders: loaders
       }
 
       var schema = deref(input, options)
@@ -252,7 +258,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/missing.json')
       var expected = require('./schemas/missing.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -270,7 +276,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/anyofref.json')
       var expected = require('./schemas/anyofref.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -279,7 +285,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/dotprop.json')
       var expected = require('./schemas/dotprop.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -288,7 +294,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/toplevel.json')
       var expected = require('./schemas/toplevel.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -297,7 +303,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/circularlocalref.json')
       var expected = require('./schemas/circularlocalref.expected.json')
 
-      var schema = deref(input, { baseFolder: './schemas' })
+      var schema = deref(input, { baseFolder: './schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.be.an.instanceOf(Error)
     })
@@ -306,7 +312,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/circularself.json')
       var expected = require('./schemas/circularself.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
 
       expect(schema).to.be.ok
       expect(schema).to.be.an.instanceOf(Error)
@@ -316,7 +322,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/circular-file-root.json')
       var expected = require('./schemas/circular-file-root.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
 
       expect(schema).to.be.ok
       expect(schema).to.be.an.instanceOf(Error)
@@ -326,7 +332,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/filerefarray-schema1.json')
       var expected = require('./schemas/filerefarray.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -334,7 +340,7 @@ describe('json-schema-deref-sync', function () {
     it('should work with cyclycal object', function () {
       var input = require('./schemas/cyclicaljs.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
 
       expect(schema).to.be.ok
       expect(schema).to.be.an.instanceOf(Error)
@@ -344,7 +350,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/nestedfolder.json')
       var expected = require('./schemas/nestedfolder.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -353,7 +359,7 @@ describe('json-schema-deref-sync', function () {
       var input = require('./schemas/issue12.json')
       var expected = require('./schemas/issue12.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -371,7 +377,7 @@ describe('json-schema-deref-sync', function () {
       const input = require('./schemas/null.json')
       const expected = require('./schemas/null.expected.json')
 
-      var schema = deref(input, { baseFolder: './test/schemas' })
+      var schema = deref(input, { baseFolder: './test/schemas', loaders: loaders })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
     })
@@ -398,7 +404,8 @@ describe('json-schema-deref-sync', function () {
       var schema = deref(input, {
         mergeAdditionalProperties: true,
         removeIds: true,
-        baseFolder: './test/schemas'
+        baseFolder: './test/schemas',
+        loaders: loaders
       })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
@@ -410,7 +417,8 @@ describe('json-schema-deref-sync', function () {
       var schema = deref(input, {
         mergeAdditionalProperties: true,
         removeIds: true,
-        baseFolder: './test/schemas'
+        baseFolder: './test/schemas',
+        loaders: loaders
       })
       expect(schema).to.be.ok
       expect(schema).to.deep.equal(expected)
