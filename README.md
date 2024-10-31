@@ -1,3 +1,7 @@
+> [!NOTE]
+> This repository is no longer maintained by Colorifix.
+
+
 # json-schema-deref-sync
 
 [![npm version](https://img.shields.io/npm/v/json-schema-deref-sync.svg?style=flat-square)](https://www.npmjs.com/package/json-schema-deref-sync)
